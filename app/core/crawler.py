@@ -49,10 +49,9 @@ class Crawler:
             if parsed.netloc and parsed.netloc != self.target.host:            
                 continue
 
-
-
             path = parsed.path or "/"
             self.context.add_endpoint(path, "GET")
+
 
     def parse_forms(self, soup, current_url):
         for form in soup.find_all("form"):
