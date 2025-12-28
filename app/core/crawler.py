@@ -48,3 +48,24 @@ class Crawler:
 
             path = parsed.path or "/"
             self.context.add_endpoint(path, "GET")
+
+    def parse_forms(self, soup, current_url):
+        for form in soup.find_all("form"):
+            action = form.get("action", "")
+            method = form.get("method", "GET").upper()
+            
+            absolute = urljoin(current_url, action)
+            parsed = urlparse(absolute)
+
+            # Vérification que l'URL est bien dans la scope
+            if parsed.netloc and parsed.netloc != self.target.host:
+                continue
+
+            path = parsed.path or "/"
+            self.context.add_endpoint(path, method)
+
+            # Récupération des inputs
+            for input_tag in form.find_all("input"):
+                name = input_tag.get("name")
+                if name:
+                    self.context.add_param(path, name)
