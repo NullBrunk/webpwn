@@ -41,7 +41,7 @@ class Target:
         yield "base", self.base
         yield "headers", {k: list(v) for k, v in self.headers.items()}
         yield "cookies", {k: list(v) for k, v in self.cookies.items()}
-        yield "suspicions", self.stack
+        yield "stack", self.stack
 
     def items(self):
         return dict(self).items()
