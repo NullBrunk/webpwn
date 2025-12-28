@@ -23,6 +23,16 @@ class Target:
         self.cookies = {}
         self.stack = []
 
+    def add_header(self, key, value):
+        self.headers[key] = value
+
+    def add_cookie(self, key, value):
+        self.cookies[key] = value
+
+    def add_stack(self, tech):
+        if tech not in self.stack:
+            self.stack.append(tech)
+
     def __iter__(self):
         yield "url", self.url
         yield "parsed", self.parsed
