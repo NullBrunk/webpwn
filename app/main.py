@@ -1,12 +1,15 @@
 from core.target import Target
 from core.context import Context
+from core.session import Session
+from core.crawler import Crawler
 
-t = Target("http://localhost")
-c = Context()
+target = Target("http://localhost")
 
-t.add_stack("php")
-c.add_endpoint("/login")
-c.add_param("/login", "username")
+session = Session(target)
+context = Context()
 
-print(dict(c))
-print(dict(t))
+crawler = Crawler(session, context)
+
+crawler.crawl()
+
+print(dict(context))

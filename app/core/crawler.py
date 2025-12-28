@@ -36,15 +36,20 @@ class Crawler:
 
     def parse_links(self, soup, current_url):
         for link in soup.find_all("a", href=True):
+
             href = link["href"]
 
             absolute = urljoin(current_url, href)
             
             parsed = urlparse(absolute)
+            if parsed.scheme and parsed.scheme not in ("http", "https"):
+                continue
 
             # Vérification que l'URL est bien dans la scope
-            if parsed.netloc and parsed.netloc != self.target.host:
+            if parsed.netloc and parsed.netloc != self.target.host:            
                 continue
+
+
 
             path = parsed.path or "/"
             self.context.add_endpoint(path, "GET")
@@ -55,7 +60,10 @@ class Crawler:
             method = form.get("method", "GET").upper()
             
             absolute = urljoin(current_url, action)
+
             parsed = urlparse(absolute)
+            if parsed.scheme and parsed.scheme not in ("http", "https"):
+                continue
 
             # Vérification que l'URL est bien dans la scope
             if parsed.netloc and parsed.netloc != self.target.host:
@@ -63,6 +71,8 @@ class Crawler:
 
             path = parsed.path or "/"
             self.context.add_endpoint(path, method)
+
+
 
             # Récupération des inputs
             for input_tag in form.find_all("input"):
