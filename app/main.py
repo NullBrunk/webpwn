@@ -3,7 +3,7 @@ from core.context import Context
 from core.session import Session
 from core.crawler import Crawler
 
-target = Target("http://localhost")
+target = Target("http://localhost:9000")
 
 session = Session(target)
 context = Context()

@@ -3,14 +3,20 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 
 class Crawler:
-    def __init__(self, session, context):
+    def __init__(self, session, context, max_depth=5):
         self.session = session
         self.context = context
         self.target = self.session.target
         self.visited = set()
+        self.max_depth = max_depth
     
-    
-    def crawl(self, path="/"):
+    def crawl(self, path="/", depth=None):
+        if depth is None:
+            depth = self.max_depth
+
+        if depth <= 0:
+            return
+
         current_url = self.target.base + path
 
         if path in self.visited:
@@ -32,6 +38,11 @@ class Crawler:
 
         self.parse_links(soup, current_url)
         self.parse_forms(soup, current_url)
+
+        for endpoint in list(self.context.endpoints.keys()):
+            if endpoint not in self.visited:
+                self.crawl(endpoint, depth - 1)
+
 
 
     def parse_links(self, soup, current_url):
